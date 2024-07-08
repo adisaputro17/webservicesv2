@@ -19,6 +19,9 @@ if ($ketemu_utama > 0) {
         if ($r[$bulan] <> '0') {
             $record = [];
             $record['no'] = $no;
+            $record['breakdown_id'] = $r['breakdown_id'];
+            $record['target_id'] = $r['target_id'];
+            $record['informasi_id'] = $r['informasi_id'];
 
             $tampil2 = mysqli_query($koneksi, "SELECT * FROM $database_skp.ref_jenis_kegiatan WHERE kegiatan_id='$r[kegiatan_id]'");
             $a = mysqli_fetch_array($tampil2);
@@ -198,6 +201,7 @@ if ($ketemu_penunjang > 0) {
         if ($r[$bulan] <> '0') {
             $record = [];
             $record['no'] = $no;
+            $record['breakdown_id'] = $r['breakdown_id'];
 
             $tampil2 = mysqli_query($koneksi, "SELECT * FROM $database_skp.ref_jenis_kegiatan WHERE kegiatan_id='$r[kegiatan_id]'");
             $a = mysqli_fetch_array($tampil2);
@@ -360,6 +364,7 @@ if ($ketemu_lain > 0) {
         if ($r[$bulan] <> '0') {
             $record = [];
             $record['no'] = $no;
+            $record['breakdown_id'] = $r['breakdown_id'];
 
             $tampil2 = mysqli_query($koneksi, "SELECT * FROM $database_skp.ref_jenis_kegiatan WHERE kegiatan_id='$r[kegiatan_id]'");
             $a = mysqli_fetch_array($tampil2);

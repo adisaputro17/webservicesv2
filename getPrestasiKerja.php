@@ -6,6 +6,7 @@ $nip = $_GET["nip"];
 $bulan = "bulan" . $_GET["bulan"];
 
 require_once "koneksi.php";
+require_once "constants.php";
 
 $response = [];
 
@@ -27,6 +28,7 @@ if (!$l) {
     return;
 }
 
+$response['pegawai_id'] = $j['pegawai_id'];
 $response['nip'] = $j['nip_baru'];
 $response['nama'] = $j['nama'];
 $response['bulan'] = $_GET['bulan'];
