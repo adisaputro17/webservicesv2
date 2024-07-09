@@ -1,14 +1,13 @@
 <?php
 
-require_once "constants.php";
+function uploadSKP($folder_files_skp, $fupload_name)
+{
+    //direktori file
+    $vdir_upload = "../$folder_files_skp/";
+    $vfile_upload = $vdir_upload . $fupload_name;
 
-function uploadSKP($fupload_name){
-  //direktori file
-  $vdir_upload = "../$folder_files_skp/";
-  $vfile_upload = $vdir_upload . $fupload_name;
-
-  //Simpan file
-  move_uploaded_file($_FILES["fskp"]["tmp_name"], $vfile_upload);
+    //Simpan file
+    move_uploaded_file($_FILES["fskp"]["tmp_name"], $vfile_upload);
 }
 
 ?>

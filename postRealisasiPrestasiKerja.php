@@ -6,6 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require_once "koneksi.php";
     require_once "constants.php";
     require_once "library.php";
+    require_once "functions.php";
 
     $module = "kinerja_bulan";
     $act = "input";
@@ -21,7 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $cek = mysqli_num_rows($tampil_file);
             if ($cek > 0) {
                 if ($s[$field] == '') {
-                    echo json_encode(["error" => "File belum ditambahkan"]);
+                    echo json_encode([
+                        "success" => false,
+                        "error" => "File belum ditambahkan"
+                    ]);
                 } else {
                     mysqli_query($koneksi, "UPDATE $database_skp.rwyt_realisasi_kuantitas SET 
                                     $field = '$_POST[kuantitas]',
@@ -47,11 +51,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     jam_edit = '$jam_sekarang'
                                     WHERE pegawai_id='$_POST[pegawai_id]' AND target_id='$_POST[target_id]' AND informasi_id='$_POST[informasi_id]'");
 
-                    echo json_encode(["error" => ""]);
+                    echo json_encode([
+                        "success" => true,
+                        "error" => ""
+                    ]);
                 }
             }
         } else {
-            echo json_encode(["error" => "No informasi found"]);
+            echo json_encode([
+                "success" => false,
+                "error" => "No informasi found"
+            ]);
         }
     }
 
@@ -66,10 +76,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $tipe = $_FILES['fskp']['type'];// untuk mengetahui tipe file
         $exts = array('application/pdf');
         if (!in_array(($tipe), $exts)) {
-            echo json_encode(["error" => "Format file tidak diizinkan"]);
+            echo json_encode([
+                "success" => false,
+                "error" => "Format file tidak diizinkan"
+            ]);
         }
         if (($size != 0) && ($size > 1000000)) {
-            echo json_encode(["error" => "Ukuran file terlalu besar"]);
+            echo json_encode([
+                "success" => false,
+                "error" => "Ukuran file terlalu besar"
+            ]);
         }
 
         $tampil_file = mysqli_query($koneksi, "SELECT $field FROM $database_skp.rwyt_realisasi_file WHERE pegawai_id='$_POST[pegawai_id]' AND breakdown_id='$_POST[breakdown_id]'");
@@ -79,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($s[$field] <> '') {
                 unlink("../$folder_files_skp/$s[$field]");
             }
-            uploadSKP($nama_file);
+            uploadSKP($folder_files_skp, $nama_file);
 
             mysqli_query($koneksi, "UPDATE $database_skp.rwyt_realisasi_file SET 
                             $field = '$nama_file', 
@@ -87,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             jam_edit = '$jam_sekarang' 
                             WHERE pegawai_id='$_POST[pegawai_id]' AND target_id='$_POST[target_id]' AND informasi_id='$_POST[informasi_id]' AND breakdown_id='$_POST[breakdown_id]'");
         } else {
-            uploadSKP($nama_file);
+            uploadSKP($folder_files_skp, $nama_file);
             mysqli_query($koneksi, "INSERT INTO $database_skp.rwyt_realisasi_file(pegawai_id, 
                             breakdown_id,
                             target_id,
@@ -133,8 +149,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             tgl_edit = '$tgl_sekarang', 
                             jam_edit = '$jam_sekarang' 
                             WHERE pegawai_id='$_POST[pegawai_id]' AND target_id='$_POST[target_id]' AND informasi_id='$_POST[informasi_id]'");
-            
-            echo json_encode(["error" => ""]);
+
+            echo json_encode([
+                "success" => true,
+                "error" => ""
+            ]);
         } else {
             mysqli_query($koneksi, "INSERT INTO $database_skp.rwyt_realisasi_kuantitas(pegawai_id, 
                             breakdown_id, 
@@ -196,12 +215,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             '$tgl_sekarang',
                             '$jam_sekarang')");
 
-            echo json_encode(["error" => ""]);
+            echo json_encode([
+                "success" => true,
+                "error" => ""
+            ]);
         }
     }
 
     //log
-    mysqli_query($koneksi,"INSERT INTO $database_skp.log_skp (pegawai_id, 
+    mysqli_query($koneksi, "INSERT INTO $database_skp.log_skp (pegawai_id, 
                     modul, 
                     aksi, 
                     tgl, 
@@ -213,6 +235,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     '$jam_sekarang')");
 
 } else {
-    echo json_encode(["error" => "Metode request tidak valid"]);
+    echo json_encode([
+        "success" => false,
+        "error" => "Metode request tidak valid"
+    ]);
 }
 ?>
