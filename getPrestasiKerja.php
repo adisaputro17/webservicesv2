@@ -66,6 +66,7 @@ if ($l['jabatan_id'] == '1') {
     $persen = ($total_wp_bulan / $wp[0]) * 100;
     $persen1 = round($persen, 2);
     $response['total_wpt_jenis_kegiatan_tupoksi'] = "$total4 Menit ($persen1%)";
+    $response['total_wpt'] = $total4;
 
     $total5 = number_format($biaya1);
     $response['total_biaya'] = "Rp. $total5";
@@ -77,6 +78,7 @@ if ($l['jabatan_id'] == '1') {
     $persen = ($total_wp_bulan / $wp[0]) * 100;
     $persen1 = round($persen, 2);
     $response['total_wpt_jenis_kegiatan_tupoksi'] = "$total4 Menit ($persen1%)";
+    $response['total_wpt'] = $total4;
 
     $totalak = $total_ak_bulan;
     $response['total_angka_kredit'] = $total_ak_bulan;
