@@ -29,6 +29,7 @@ if (!$l) {
 }
 
 $response['pegawai_id'] = $j['pegawai_id'];
+$response['informasi_id'] = $l['informasi_id'];
 $response['nip'] = $j['nip_baru'];
 $response['nama'] = $j['nama'];
 $response['bulan'] = $_GET['bulan'];

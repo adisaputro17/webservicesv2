@@ -21,7 +21,6 @@ if ($ketemu_utama > 0) {
             $record['no'] = $no;
             $record['breakdown_id'] = $r['breakdown_id'];
             $record['target_id'] = $r['target_id'];
-            $record['informasi_id'] = $r['informasi_id'];
 
             $tampil2 = mysqli_query($koneksi, "SELECT * FROM $database_skp.ref_jenis_kegiatan WHERE kegiatan_id='$r[kegiatan_id]'");
             $a = mysqli_fetch_array($tampil2);
