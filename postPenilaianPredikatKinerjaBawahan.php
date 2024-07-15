@@ -128,6 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             "success" => false,
             "error" => "Nilai perilaku atau nilai hasil kerja terlalu besar"
         ]);
+        die();
     }
     if (($_POST['nilai_perilaku'] >= 110) and ($_POST['nilai_perilaku'] <= 120)) {
         $perilaku = 'Diatas Ekspetasi';
@@ -170,8 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         nilai_predikat = '$nilai',
                         predikat = '$predikat',
                         tgl_nilai = '$tgl_sekarang',
-                        jam_nilai = '$jam_sekarang',
-                        aktif='N'
+                        jam_nilai = '$jam_sekarang'
                     WHERE pegawai_id='$_POST[pegawai_id]' AND informasi_id='$_POST[informasi_id]' AND bulan='$_POST[bln]'");
 
     } else {
