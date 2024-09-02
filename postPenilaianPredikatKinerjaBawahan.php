@@ -19,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         status_realisasi='Persetujuan Atasan',
                         verifikasi='Setuju',
                         banding='Menerima',
+                        tgl_kirim='$tgl_sekarang',
+                        jam_kirim='$jam_sekarang',
                         tgl_edit_atasan='$tgl_sekarang',
                         jam_edit_atasan='$jam_sekarang' 
                     WHERE pegawai_id = '$_POST[pegawai_id]' AND informasi_id='$_POST[informasi_id]' AND bulan='$_POST[bln]'");
