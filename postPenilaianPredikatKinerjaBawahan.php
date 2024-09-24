@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $status = "success";
     $error_message = "";
 
-    $required_params = ['pegawai_id', 'informasi_id', 'bln', 'total_wpt', 'total_angka_kredit', 'total_nilai_rata_rata_kinerja', 'nilai_perilaku', 'nilai_hasil_kerja'];
+    $required_params = ['pegawai_id', 'informasi_id', 'bln'];
 
     foreach ($required_params as $param) {
         if (empty($_POST[$param])) {
