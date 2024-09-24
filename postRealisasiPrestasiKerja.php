@@ -8,6 +8,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require_once "library.php";
     require_once "functions.php";
 
+    $nama_api = "postRealisasiPrestasiKerja";
+    $request = $_POST;
+    $status = "success";
+    $error_message = "";
+
+    $required_params = ['pegawai_id', 'breakdown_id', 'target_id', 'informasi_id', 'kuantitas', 'kualitas', 'bln'];
+
+    foreach ($required_params as $param) {
+        if (empty($_POST[$param])) {
+            $error_message = "Parameter $param kosong";
+            $status = "failed";
+            echo json_encode([
+                "success" => false,
+                "error" => $error_message
+            ]);
+
+            logAPI($koneksi, $nama_api, $request, $status, $error_message);
+            exit();
+        }
+    }
+
     $module = "kinerja_bulan";
     $act = "input";
     $field = "bulan" . $_POST['bln'];
@@ -22,10 +43,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $cek = mysqli_num_rows($tampil_file);
             if ($cek > 0) {
                 if ($s[$field] == '') {
+                    $error_message = "File belum ditambahkan";
+                    $status = "failed";
                     echo json_encode([
                         "success" => false,
-                        "error" => "File belum ditambahkan"
+                        "error" => $error_message
                     ]);
+
+                    logAPI($koneksi, $nama_api, $request, $status, $error_message);
                 } else {
                     mysqli_query($koneksi, "UPDATE $database_skp.rwyt_realisasi_kuantitas SET 
                                     $field = '$_POST[kuantitas]',
@@ -55,13 +80,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         "success" => true,
                         "error" => ""
                     ]);
+
+                    logAPI($koneksi, $nama_api, $request, $status, $error_message);
                 }
             }
         } else {
+            $error_message = "No informasi found";
+            $status = "failed";
             echo json_encode([
                 "success" => false,
-                "error" => "No informasi found"
+                "error" => $error_message
             ]);
+
+            logAPI($koneksi, $nama_api, $request, $status, $error_message);
         }
     }
 
@@ -76,16 +107,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $tipe = $_FILES['fskp']['type'];// untuk mengetahui tipe file
         $exts = array('application/pdf');
         if (!in_array(($tipe), $exts)) {
+            $error_message = "Format file tidak diizinkan";
+            $status = "failed";
             echo json_encode([
                 "success" => false,
-                "error" => "Format file tidak diizinkan"
+                "error" => $error_message
             ]);
+
+            logAPI($koneksi, $nama_api, $request, $status, $error_message);
         }
         if (($size != 0) && ($size > 1000000)) {
+            $error_message = "Ukuran file terlalu besar";
+            $status = "failed";
             echo json_encode([
                 "success" => false,
-                "error" => "Ukuran file terlalu besar"
+                "error" => $error_message
             ]);
+
+            logAPI($koneksi, $nama_api, $request, $status, $error_message);
         }
 
         $tampil_file = mysqli_query($koneksi, "SELECT $field FROM $database_skp.rwyt_realisasi_file WHERE pegawai_id='$_POST[pegawai_id]' AND breakdown_id='$_POST[breakdown_id]'");
@@ -154,6 +193,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 "success" => true,
                 "error" => ""
             ]);
+
+            logAPI($koneksi, $nama_api, $request, $status, $error_message);
         } else {
             mysqli_query($koneksi, "INSERT INTO $database_skp.rwyt_realisasi_kuantitas(pegawai_id, 
                             breakdown_id, 
@@ -219,20 +260,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 "success" => true,
                 "error" => ""
             ]);
+
+            logAPI($koneksi, $nama_api, $request, $status, $error_message);
         }
     }
-
-    //log
-    mysqli_query($koneksi, "INSERT INTO $database_skp.log_skp (pegawai_id, 
-                    modul, 
-                    aksi, 
-                    tgl, 
-                    jam)
-                VALUES('$_POST[pegawai_id]',
-                    '$module',
-                    '$act',
-                    '$tgl_sekarang',
-                    '$jam_sekarang')");
 
 } else {
     echo json_encode([
